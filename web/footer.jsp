@@ -14,8 +14,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body class="footer">
-        <div class="footer-card">
+    <body>
+        <div class="header-card">
             <ul id="footer_links">
                 <li>About</li>
                 <li>Help Center</li>

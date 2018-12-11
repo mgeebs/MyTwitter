@@ -26,9 +26,9 @@ public class UserDB {
         
         String sqlStatement = 
         "INSERT INTO twitterdb.user (fullname, username, emailAddress, "
-        + "birthdate, password, questionNo, answer, salt) "
+        + "birthdate, password, questionNo, answer) "
         + "VALUES ('%s', '%s', '%s', "
-        + "'%s', '%s', '%s', '%s', '1234')";
+        + "'%s', '%s', '%s', '%s')";
         
         String sqlInsert = 
                 String.format(sqlStatement, user.getFullName(), user.getUsername(),
@@ -52,13 +52,7 @@ public class UserDB {
             // parse the SQL string
             sqlInsert = sqlInsert.trim();
 
-            int i = statement.executeUpdate(sqlInsert, Statement.RETURN_GENERATED_KEYS);
-                        
-            ResultSet rs = statement.getGeneratedKeys();
-            
-            if (rs.next()) {
-                user.setUserID(Integer.toString(rs.getInt(1)));
-            }
+            int i = statement.executeUpdate(sqlInsert);
             if (i == 0) { // a DDL statement
                 return false;
             } else { // an INSERT, UPDATE, or DELETE statement
@@ -72,7 +66,10 @@ public class UserDB {
         }    
     }
     
-    public static User search_for_email(String emailAddress) {
+    public static User search_for_email(String emailAddress) 
+    {
+        
+        
         try {
             // load the driver
             Class.forName("com.mysql.jdbc.Driver");   
@@ -96,7 +93,6 @@ public class UserDB {
             } 
             
             if (resultSet.next()) {
-                user.setUserID(resultSet.getString(1));
                 user.setFullName(resultSet.getString(2));
                 user.setUsername(resultSet.getString(3));
                 user.setEmailAddress(resultSet.getString(4));
@@ -105,87 +101,6 @@ public class UserDB {
                 user.setQuestionNo(resultSet.getString(7));
                 user.setAnswer(resultSet.getString(8));                
                 return user;
-            }
-            else {
-                return null;
-            }
-        } catch (SQLException e) {
-            return null;
-        } catch (ClassNotFoundException ex) {
-            return null;
-        }   
-    }
-    
-    public static User search_for_userID(String userID) 
-    {
-        try {
-            // load the driver
-            Class.forName("com.mysql.jdbc.Driver");   
-            
-            String query = "SELECT * FROM  twitterdb.user WHERE userID = '" + userID + "'";
-            
-            ConnectionPool pool = ConnectionPool.getInstance();
-            Connection connection = pool.getConnection();
-
-            // create a statement
-            Statement statement = connection.createStatement();
-
-            // parse the SQL string
-            query = query.trim();
-
-            ResultSet resultSet = statement.executeQuery(query);
-            User user = new User();
-            
-            if (!resultSet.isBeforeFirst() ) {    
-                return null; 
-            } 
-            
-            if (resultSet.next()) {
-                user.setUserID(resultSet.getString(1));
-                user.setFullName(resultSet.getString(2));
-                user.setUsername(resultSet.getString(3));
-                user.setEmailAddress(resultSet.getString(4));
-                user.setBirthdate(resultSet.getString(5));
-                user.setPassword(resultSet.getString(6));
-                user.setQuestionNo(resultSet.getString(7));
-                user.setAnswer(resultSet.getString(8));                
-                return user;
-            }
-            else {
-                return null;
-            }
-        } catch (SQLException e) {
-            return null;
-        } catch (ClassNotFoundException ex) {
-            return null;
-        }   
-    }
-    
-    public static String usernameToUserID(String userName) 
-    {
-        try {
-            // load the driver
-            Class.forName("com.mysql.jdbc.Driver");   
-            
-            String query = "SELECT userID FROM twitterdb.user WHERE userName = '" + userName + "'";
-            
-            ConnectionPool pool = ConnectionPool.getInstance();
-            Connection connection = pool.getConnection();
-
-            // create a statement
-            Statement statement = connection.createStatement();
-
-            // parse the SQL string
-            query = query.trim();
-
-            ResultSet resultSet = statement.executeQuery(query);
-            
-            if (!resultSet.isBeforeFirst()) {    
-                return null; 
-            } 
-            
-            if (resultSet.next()) {
-                return resultSet.getString(1);
             }
             else {
                 return null;
@@ -234,4 +149,36 @@ public class UserDB {
         return null;
     }
     
+    public static ArrayList<User> select_all_users() {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String query = "SELECT * FROM User";
+        try {
+            ps = connection.prepareStatement(query);
+            
+            rs = ps.executeQuery();
+            ArrayList<User> userList = new ArrayList<User>();
+
+            User user = null;
+
+            while (rs.next()) {
+                user = new User();
+                user.setFullName(rs.getString("FullName"));
+                user.setEmailAddress(rs.getString("EmailAddress"));
+                userList.add(user);
+            }
+            return userList;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return null;
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+
+    }
 }

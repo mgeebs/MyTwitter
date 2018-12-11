@@ -96,17 +96,6 @@
     color: white;
 }
 
-.footer-card {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 7%;
-    margin: auto;
-    background: #00aced;
-    color: white;
-}
-
 #footer_links{
     width: 90%;
     display: table;
@@ -193,15 +182,4 @@ content {
     display: table-cell;
     width: 20%;
     padding:10px;
-}
-
-a:link {
-  color: blue;
-  background-color: transparent;
-  text-decoration: none;
-}
-a:visited {
-  color: blue;
-  background-color: transparent;
-  text-decoration: none;
 }
