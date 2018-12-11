@@ -17,7 +17,6 @@ import javax.servlet.http.*;
 
 
 import java.sql.*;
-import murach.util.DBUtil;
 
 public class TweetDB {
     
@@ -25,78 +24,26 @@ public class TweetDB {
     {  
                 
         String sqlStatement = 
-        "INSERT INTO twitterdb.tweets (userID, tweet, username) "
-        + "VALUES ('%s', '%s', '%s');";
+        "INSERT INTO twitterdb.tweets (emailAddress, tweet) "
+        + "VALUES ('%s', '%s')";
         
         String sqlInsert = 
-                String.format(sqlStatement, tweet.getUserID(), tweet.getTweet(), tweet.getUsername());
-        
-        ConnectionPool pool = null;
-        Connection connection = null;
-        Statement statement = null;
+                String.format(sqlStatement, tweet.getEmailAddress(), tweet.getTweet());
         
         try {
 //             load the driver
             Class.forName("com.mysql.jdbc.Driver");            
-            pool = ConnectionPool.getInstance();
-            connection = pool.getConnection();
+            
+            ConnectionPool pool = ConnectionPool.getInstance();
+            Connection connection = pool.getConnection();
+
 //             create a statement
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
 
 //             parse the SQL string
             sqlInsert = sqlInsert.trim();
 
-            int i = statement.executeUpdate(sqlInsert, Statement.RETURN_GENERATED_KEYS);
-            
-            ResultSet rs = statement.getGeneratedKeys();
-            
-            if (rs.next()) {
-                tweet.setTweetID( Integer.toString(rs.getInt(1)));
-            }
-            
-            if (i == 0) { 
-                return false;
-            } else {
-                return true;
-            }
-   
-        } catch (SQLException e) {
-            return false;
-        } catch (ClassNotFoundException ex) {
-            return false;
-        } finally {
-            if (connection != null)
-                pool.freeConnection(connection);
-            if(statement != null)
-                DBUtil.closeStatement(statement);
-        }
-    }
-    
-    public static boolean delete_tweet(String tweet_id) throws IOException 
-    {  
-                
-        String query = 
-        "DELETE FROM  twitterdb.tweets WHERE tweetID="+ tweet_id;
-        
-        ConnectionPool pool = null;
-        Connection connection = null;
-        Statement statement = null;
-        
-        try {
-//             load the driver
-            Class.forName("com.mysql.jdbc.Driver");            
-            
-            pool = ConnectionPool.getInstance();
-            connection = pool.getConnection();
-
-//             create a statement
-            statement = connection.createStatement();
-
-//             parse the SQL string
-            query = query.trim();
-
-            int i = statement.executeUpdate(query);
-
+            int i = statement.executeUpdate(sqlInsert);
             if (i == 0) { // a DDL statement
                 return false;
             } else { // an INSERT, UPDATE, or DELETE statement
@@ -107,38 +54,63 @@ public class TweetDB {
             return false;
         } catch (ClassNotFoundException ex) {
             return false;
-        } finally {
-            if (statement != null)
-                DBUtil.closeStatement(statement);
-            if (connection != null)
-                pool.freeConnection(connection);
-        }
+        }    
     }
     
-    public static List<Tweet> get_all_tweets(String userID) 
+    public static boolean delete_tweet(String tweet_id) throws IOException 
+    {  
+                
+        String query = 
+        "DELETE FROM  twitterdb.tweets WHERE tweetID="+ tweet_id;
+        
+        try {
+//             load the driver
+            Class.forName("com.mysql.jdbc.Driver");            
+            
+            ConnectionPool pool = ConnectionPool.getInstance();
+            Connection connection = pool.getConnection();
+
+//             create a statement
+            Statement statement = connection.createStatement();
+
+//             parse the SQL string
+            query = query.trim();
+
+            int i = statement.executeUpdate(query);
+            if (i == 0) { // a DDL statement
+                return false;
+            } else { // an INSERT, UPDATE, or DELETE statement
+                return true;
+            }
+   
+        } catch (SQLException e) {
+            return false;
+        } catch (ClassNotFoundException ex) {
+            return false;
+        }    
+    }
+    
+    public static List<Tweet> get_all_tweets(String userEmail) 
     {
-        ConnectionPool pool = null;
-        Connection connection = null;
-        ResultSet resultSet = null;
-        Statement statement = null;
+       
         try {
             // load the driver
             Class.forName("com.mysql.jdbc.Driver");   
             
-            String query = "SELECT tweetID, userID, tweet, username  FROM  twitterdb.tweets WHERE userID = '" + userID + "'";
+            String query = "SELECT * FROM  twitterdb.tweets WHERE emailAddress = '" + userEmail + "'";
             
-            pool = ConnectionPool.getInstance();
-            connection = pool.getConnection();
+            ConnectionPool pool = ConnectionPool.getInstance();
+            Connection connection = pool.getConnection();
 
             // create a statement
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
 
             // parse the SQL string
             query = query.trim();
 
-            resultSet = statement.executeQuery(query);
-            List<Tweet> results = new ArrayList<Tweet>();
-                        
+            ResultSet resultSet = statement.executeQuery(query);
+            List<Tweet> results = new ArrayList<Tweet>();;
+            
             if (!resultSet.isBeforeFirst() ) {    
                 return null; 
             } 
@@ -146,13 +118,10 @@ public class TweetDB {
             Tweet temp_tweet = new Tweet(); 
             
             while(resultSet.next()) {   
-                temp_tweet = new Tweet(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
-                temp_tweet.setTweetID(resultSet.getString(1));
+                temp_tweet = new Tweet(resultSet.getString(2), resultSet.getString(3));
+                temp_tweet.setTweetID(resultSet.getInt(1));
                 results.add(temp_tweet);   
             }
-            
-            DBUtil.closeResultSet(resultSet);
-            pool.freeConnection(connection);
             
             return results;
             
@@ -160,18 +129,12 @@ public class TweetDB {
             return null;
         } catch (ClassNotFoundException ex) {
             return null;
-        } finally {
-            if (statement != null)
-                DBUtil.closeStatement(statement);
-            if (connection != null)
-                pool.freeConnection(connection);
-            if (resultSet != null)
-                DBUtil.closeResultSet(resultSet);
-        }
+        }   
     }
     
     public static String search_for_username(String username) 
     {
+        
         return null;
     }
     

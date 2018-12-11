@@ -5,10 +5,7 @@
  */
 package controller;
 
-import business.Tweet;
 import business.User;
-import dataaccess.HashTagDB;
-import dataaccess.TweetDB;
 import dataaccess.UserDB;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dataaccess.UserDB;
-import java.util.Collections;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 
 
@@ -33,24 +28,8 @@ public class homeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String url = "/home.jsp";
-        
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        String userID = user.getUserID(); 
  
-        List<Tweet> tweets = TweetDB.get_all_tweets(userID);
-        
-        if (tweets != null)
-            Collections.reverse(tweets); 
-        
-        session.setAttribute("tweets", tweets);
-
-        
-        List<String> trending = HashTagDB.getTrending();
-        
-        session.setAttribute("trending", trending);
+        String url = "/home.jsp";
         
         request.getRequestDispatcher(url)
           .forward(request, response);
@@ -67,8 +46,6 @@ public class homeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        doGet(request, response);
         
         
     }
