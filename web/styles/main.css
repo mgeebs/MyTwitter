@@ -1,0 +1,207 @@
+/* The styles for the elements */
+
+/* The styles for the classes */
+
+/* The styles for the specific elements (by Id) */
+
+
+/* Style the tab buttons */
+
+#each_tweet{
+    border:1px solid black;
+}
+
+#home {
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    background-color: #00aced;
+    color: white;
+    float: left;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 10px;
+    font-size: 10px;
+    width: 14%;
+}
+
+#notifications {
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    background-color: #00aced;
+    color: white;
+    float: left;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 10px;
+    font-size: 10px;
+    width: 14%;
+}
+#profile {
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    background-color: #00aced;
+    color: white;
+    float: left;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 10px;
+    font-size: 10px;
+    width: 14%;
+}
+
+#signout {
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    background-color: #00aced;
+    height: 200%;
+    color: white;
+    float: right;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 10px;
+    font-size: 10px;
+    width: 14%;
+}
+
+#header_bar {
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    padding-right: 10;
+    background-color: #00aced;
+    color: white;
+    float: left;
+    outline: none;
+    padding: 10px 10px;
+    font-size: 10px;
+    width: 44%;
+}
+
+.tablink:hover {
+    background-color: #777;
+}
+
+.header-card {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5%;
+    margin: auto;
+    background: #00aced;
+    color: white;
+}
+
+.footer-card {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 7%;
+    margin: auto;
+    background: #00aced;
+    color: white;
+}
+
+#footer_links{
+    width: 90%;
+    display: table;
+    table-layout: fixed;  
+}
+
+ul#footer_links li {
+    display: table-cell;
+    width: auto;
+    text-align: center;
+}
+
+.top_centered {
+    float:top;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+}
+.bottom_centered{
+    float:bottom;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+}
+
+error {
+    font-family: Arial;
+    font-weight: bold;
+    color: red;
+    display: inline-block;
+}
+
+success {
+    font-family: Arial;
+    font-weight: bold;
+    color: green;
+    display: block;
+}
+
+content {
+    height: 100%;
+    margin-top: 10px;
+}
+
+/*textarea {
+    font-size: 24px;
+}*/
+
+.homepage
+{
+    font-size: 20px;
+    margin:70px auto 50px;
+    width: 100%;
+    font-family: Tahoma;
+    display: table;
+}
+
+.tweet_box
+{
+    width: 80%;
+    padding:20px;
+    background: white;
+    margin:0px auto 10px;
+    border-radius:6px;
+    
+}
+
+.left_content{
+    display: table-cell;
+    width: 20%;
+    margin:0px auto 70px;
+    padding:10px;
+}
+
+.center_content{
+
+    display: table-cell;
+    width: 50%;
+    margin:200px auto 70px;
+    padding: 10px;
+/*    background-color: #00aced;*/
+}
+.right_content{
+    display: table-cell;
+    width: 20%;
+    padding:10px;
+}
+
+a:link {
+  color: blue;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:visited {
+  color: blue;
+  background-color: transparent;
+  text-decoration: none;
+}
