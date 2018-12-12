@@ -14,37 +14,50 @@ public class Tweet implements Serializable {
     //define attributes fullname, ...
     
     //define set/get methods for all attributes.
-    private int tweetID;
-    private String emailAddress;
+    private String tweetID;
+    private String userID;
     private String tweet;
     private String mention;
+    private String username;
 
     public Tweet()
     {
-        emailAddress = "";
+        userID = "";
         tweet = "";
         mention = "";
+        username = "";
 
     }
     
-    public Tweet(String emailAddress, String tweet)
+    public Tweet(String userID, String tweet, String username)
     {
-        this.setEmailAddress(emailAddress);
+        this.setUserID(userID);
         this.setTweet(tweet);
+        this.setUsername(username);
     }
     
-    public String getEmailAddress()
+    public String getUserID()
     {
-        return this.emailAddress;
+        return this.userID;
     }
-    public void setEmailAddress(String emailAddress)
+    public void setUserID(String userID)
     {
-        this.emailAddress = emailAddress;
+        this.userID = userID;
     }
     
     public String getTweet()
     {
         return this.tweet;
+    }
+    
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+    
+    public String getUsername()
+    {
+        return this.username;
     }
     
     public void setTweet(String tweet)
@@ -61,11 +74,11 @@ public class Tweet implements Serializable {
         this.mention = mentions;
     }
     
-    public int getTweetID()
+    public String getTweetID()
     {
         return this.tweetID;
     }
-    public void setTweetID(int tweetID)
+    public void setTweetID(String tweetID)
     {
         this.tweetID = tweetID;
     }

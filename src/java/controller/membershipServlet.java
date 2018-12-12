@@ -5,15 +5,15 @@
  */
 package controller;
 
-import business.Follow;
 import business.Tweet;
 import business.User;
-import dataaccess.FollowDB;
+import dataaccess.UserDB;
 import dataaccess.TweetDB;
 import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import java.util.Date;
-import java.util.Calendar;
+
 import javax.servlet.http.Cookie; 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,11 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dataaccess.UserDB;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import murach.util.MailUtilGmail;
@@ -50,35 +50,15 @@ public class membershipServlet extends HttpServlet {
     String rememberMe = request.getParameter("remember_me");
         
     User user = UserDB.search_for_email(email);
-    ArrayList<User> users = UserDB.select_all_users();
-    request.setAttribute("users", users);
-    session.setAttribute("users", users);
-    for (Cookie cookie : request.getCookies()) {
-        
-        Cookie cook = new Cookie(cookie.getName(), "");
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cook);
-
-        response.addCookie(cookie);
-    };
-    
-    if (user == null){
-        for (Cookie cookie : request.getCookies()) {
-            
-            if (cookie.getName() == "userName"){
-                user = UserDB.search_for_email(email);
-            }
-            
-        };
-    }
     
     if(user == null){
         url = "/login.jsp";
         request.setAttribute("login_error", "User not found");
     }else{
+        String userID = user.getUserID();
+        
         if(user.getPassword().equals(password)){
-            url = "/home.jsp";
+            url = "/home";
             
             session.setAttribute("user", user);
              
@@ -101,18 +81,7 @@ public class membershipServlet extends HttpServlet {
             
             session.setAttribute("login_error", "");
             session.setAttribute("user", user);
-            
-            
-            TweetDB tweetDB = new TweetDB();
-            List<Tweet> tweets = tweetDB.get_all_tweets(user.getEmailAddress());
-            
-            if (tweets != null) {
-            Collections.reverse(tweets); 
-        
-            session.setAttribute("tweets", tweets);
-            
-            }
-                                                   
+                                              
         } 
         else {
             url = "/login.jsp";
@@ -137,53 +106,12 @@ public class membershipServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         String action = request.getParameter("action");
-        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy");
-        Date today = Calendar.getInstance().getTime();
-        String date = sdf.format(today);
-        
         String url = "/signup.jsp";
-        String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        User sessionUser = (User) session.getAttribute("user");
-        String folEmail = request.getParameter("action1");
         
-        if (action.equals("follow")) {
-            User user = UserDB.search_for_email(sessionUser.getEmailAddress());
-            email = user.getEmailAddress();
-            Follow follow = new Follow(email, folEmail, date);
-            FollowDB.insert(follow);
-            url = "/home.jsp";
-            session.setAttribute("user", user);
-            request.setAttribute("email", email);
-        }
-
-        if (action.equals("unfollow")) {
-            User user = UserDB.search_for_email(sessionUser.getEmailAddress());
-            email = user.getEmailAddress();
-            FollowDB.unfollow(email, folEmail);
-
-            url = "/home.jsp";
-
-            session.setAttribute("user", user);
-            request.setAttribute("email", email);
-        }
         if (action.equals("forgotPassword")) {
             url = updatePassword(request, response);
         }
-        
-        ArrayList<Follow> follows = FollowDB.searchButton(email);
-        request.setAttribute("follows", follows);
-        int followingCount = 0;
-        followingCount = follows.size();
-        request.setAttribute("followingCount", followingCount);
-
-        ArrayList<Follow> followers = FollowDB.followers(email);
-        int followersCount = 0;
-        followersCount = followers.size();
-        request.setAttribute("followersCount", followersCount);
         
         getServletContext().getRequestDispatcher(url).forward(request,response);
         

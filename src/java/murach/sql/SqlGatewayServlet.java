@@ -23,10 +23,13 @@ public class SqlGatewayServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(true);
+        session.setAttribute("signed_in", false);
+        session.setAttribute("user", null);
         Cookie[] cookies = request.getCookies();
         String password, fullName, emailAddress, userName, questionNo, answer, birthdate;
-        password = fullName = emailAddress = userName = questionNo = answer = birthdate = "";
-
+        password = fullName = emailAddress = userName = questionNo = answer = birthdate ="";
+       
+        
         for (Cookie cookie: cookies) {
             if (cookie.getName().equals("password")) {
                 password = cookie.getValue();
@@ -94,16 +97,16 @@ public class SqlGatewayServlet extends HttpServlet {
                 response.addCookie(cookie);
             }
         }
-        
+ 
         User user = new User(String.join(",", fullName, userName, emailAddress, password, birthdate, questionNo, answer));
-
         boolean db_result = UserDB.insert(user);
         
-        request.setAttribute("user", user);
+        session.setAttribute("user", user);
         
         String url = "";
         
         if (db_result == true) {
+            session.setAttribute("signed_in", true);
             url = "/home.jsp";
         }
         else{
