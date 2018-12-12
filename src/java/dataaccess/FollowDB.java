@@ -22,7 +22,7 @@ public class FollowDB {
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         String query
-                = "INSERT INTO twitterdb.follows (Email, FollowedEmail, Date) "
+                = "INSERT INTO twitterdb.follows (Email, followedEmail, followedDate) "
                 + "VALUES (?, ?, ?)";
         try {
             ps = connection.prepareStatement(query);
@@ -39,7 +39,7 @@ public class FollowDB {
         }
     }
 
-    public static ArrayList<Follow> searchButton(String email) {
+    public static ArrayList<Follow> searchByEmail(String email) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -58,7 +58,7 @@ public class FollowDB {
                 follow = new Follow();
                 follow.setEmail(rs.getString("Email"));
                 follow.setFollowedEmail(rs.getString("followedEmail"));
-                follow.setDate(rs.getString("Date"));
+                follow.setDate(rs.getString("followedDate"));
                 followList.add(follow);
 
             }
@@ -93,7 +93,7 @@ public class FollowDB {
                 follow = new Follow();
                 follow.setEmail(rs.getString("Email"));
                 follow.setFollowedEmail(rs.getString("followedEmail"));
-                follow.setDate(rs.getString("Date"));
+                follow.setDate(rs.getString("followedDate"));
                 followList.add(follow);
 
             }
