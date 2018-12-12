@@ -77,6 +77,7 @@ public class membershipServlet extends HttpServlet {
         url = "/login.jsp";
         request.setAttribute("login_error", "User not found");
     }else{
+        String userID = user.getUserID();
         if(user.getPassword().equals(password)){
             url = "/home.jsp";
             
