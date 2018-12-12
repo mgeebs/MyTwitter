@@ -234,4 +234,32 @@ public class UserDB {
         return null;
     }
     
+    public static ArrayList<User> select_all_users() {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+         String query = "SELECT * FROM User";
+        try {
+            ps = connection.prepareStatement(query);
+            
+            rs = ps.executeQuery();
+            ArrayList<User> userList = new ArrayList<User>();
+             User user = null;
+             while (rs.next()) {
+                user = new User();
+                user.setFullName(rs.getString("FullName"));
+                user.setEmailAddress(rs.getString("EmailAddress"));
+                userList.add(user);
+            }
+            return userList;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return null;
+        } finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+     }
 }
