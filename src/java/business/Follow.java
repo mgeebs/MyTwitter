@@ -8,20 +8,20 @@ package business;
 public class Follow {
     private int followId;    
     private String email;
-    private String emailFollowing;
+    private String followedEmail;
     private String date;
     
 
 
     public Follow(){
         email = " ";
-        emailFollowing = " ";
+        followedEmail = " ";
         date = " ";
     }
     
-    public Follow(String email, String emailFollowing, String date) {
+    public Follow(String email, String followedEmail, String date) {
         this.email = email;
-        this.emailFollowing = emailFollowing;
+        this.followedEmail = followedEmail;
         this.date = date;
     }
 
@@ -33,12 +33,12 @@ public class Follow {
         this.email = email;
     }
 
-    public String getEmailFollowing() {
-        return emailFollowing;
+    public String getFollowedEmail() {
+        return followedEmail;
     }
 
-    public void setEmailFollowing(String emailFollowing) {
-        this.emailFollowing = emailFollowing;
+    public void setFollowedEmail(String followedEmail) {
+        this.followedEmail = followedEmail;
     }
 
        public int getFollowId() {
