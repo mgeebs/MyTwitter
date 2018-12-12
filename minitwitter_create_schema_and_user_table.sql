@@ -16,7 +16,6 @@ CREATE SCHEMA IF NOT EXISTS `twitterdb` DEFAULT CHARACTER SET utf8 ;
 DROP DATABASE IF EXISTS `twitterdb`;
 
 CREATE DATABASE `twitterdb`;
-
 CREATE TABLE IF NOT EXISTS twitterdb.user (
   `userID` int(11) NOT NULL AUTO_INCREMENT,
   `fullname` varchar(45) NOT NULL,
@@ -38,7 +37,7 @@ CREATE TABLE IF NOT EXISTS twitterdb.tweets (
   `userID` int(11) NOT NULL,
   `tweet` VARCHAR(5000) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
-  `dateCreated` DATETIME,
+  `dateCreated` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`tweetID`));
 
 CREATE TABLE IF NOT EXISTS twitterdb.mentions (
@@ -58,12 +57,14 @@ CREATE TABLE IF NOT EXISTS twitterdb.tweetHashtag(
   `hashtagID` INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS twitterdb.follow (
-  `userID` INT NOT NULL,
-  `followedUserID` INT NOT NULL,
-  `dateFollowed` DATETIME
+DROP TABLE IF EXISTS twitterdb.follows;
+CREATE TABLE twitterdb.follows(
+  `followId` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(45) DEFAULT NULL,
+  `followedEmail` varchar(45) DEFAULT NULL,
+  `followedDate` VARCHAR(45),
+  PRIMARY KEY (`followId`)
 );
-
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
