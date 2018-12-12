@@ -22,12 +22,12 @@ public class FollowDB {
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         String query
-                = "INSERT INTO twitterdb.follows (Email, EmailFollowing, Date) "
+                = "INSERT INTO twitterdb.follows (Email, FollowedEmail, Date) "
                 + "VALUES (?, ?, ?)";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, follow.getEmail());
-            ps.setString(2, follow.getEmailFollowing());
+            ps.setString(2, follow.getFollowedEmail());
             ps.setString(3, follow.getDate());
             return ps.executeUpdate();
         } catch (SQLException e) {
@@ -57,7 +57,7 @@ public class FollowDB {
             while (rs.next()) {
                 follow = new Follow();
                 follow.setEmail(rs.getString("Email"));
-                follow.setEmailFollowing(rs.getString("EmailFollowing"));
+                follow.setFollowedEmail(rs.getString("followedEmail"));
                 follow.setDate(rs.getString("Date"));
                 followList.add(follow);
 
@@ -80,7 +80,7 @@ public class FollowDB {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String query = "SELECT * FROM twitterdb.follows WHERE EmailFollowing = ?";
+        String query = "SELECT * FROM twitterdb.follows WHERE followedEmail = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, email);
@@ -92,7 +92,7 @@ public class FollowDB {
             while (rs.next()) {
                 follow = new Follow();
                 follow.setEmail(rs.getString("Email"));
-                follow.setEmailFollowing(rs.getString("EmailFollowing"));
+                follow.setFollowedEmail(rs.getString("followedEmail"));
                 follow.setDate(rs.getString("Date"));
                 followList.add(follow);
 
@@ -109,17 +109,17 @@ public class FollowDB {
 
     }
 
-    public static int unfollow(String email, String emailFollowing) {
+    public static int unfollow(String email, String followedEmail) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
 
         String query = "DELETE FROM twitterdb.follows "
-                + "WHERE Email = ? AND EmailFollowing = ?";
+                + "WHERE Email = ? AND followedEmail = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, email);
-            ps.setString(2, emailFollowing);
+            ps.setString(2, followedEmail);
             return ps.executeUpdate();
 
         } catch (SQLException e) {
