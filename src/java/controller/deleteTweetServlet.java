@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import business.Tweet;
+import dataaccess.HashTagDB;
+import dataaccess.MentionDB;
 import dataaccess.UserDB;
 import dataaccess.TweetDB;
 import java.util.ArrayList;
@@ -35,7 +37,6 @@ public class deleteTweetServlet extends HttpServlet {
             throws ServletException, IOException {
  
     }
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -48,24 +49,15 @@ public class deleteTweetServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String url = "/home.jsp";
+        String url = "/home";
         
         HttpSession session = request.getSession();
-        String tweet_id = request.getParameter("tweet_id");
-        
-        User user = (User) session.getAttribute("user");
-        String email = user.getEmailAddress();
-        
-        TweetDB tweetDB = new TweetDB();
-        
-        
-        tweetDB.delete_tweet(tweet_id);
+        String tweet_id = request.getParameter("tweet_id");        
+       
+        TweetDB.delete_tweet(tweet_id);
+        MentionDB.delete_all_mentions(tweet_id);
+        HashTagDB.delete_all_hash_tag(tweet_id, session);
 
-       List<Tweet> tweets = tweetDB.get_all_tweets(email);
-       Collections.reverse(tweets); 
-
-       session.setAttribute("tweets", tweets);
-        
         getServletContext()
           .getRequestDispatcher(url)
           .forward(request, response);
