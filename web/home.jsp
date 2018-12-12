@@ -23,11 +23,9 @@
                         <label>${user.fullName}</label>
                         <label>user info goes here</label><br><br>
                         <hr/>
-                        <label>Full Name </label>
-                        <label>Email address</label><br><br>
-                        <label>Number of tweets </label>
-                        <label>Profile Pic</label><br><br>
-                    </div>
+                        <label>@${user.username}</label>
+                        <label>${user.emailAddress}</label>
+                        <label># of tweets: </label><br><br>
                 </div>
                         
                 <div class="trends">
@@ -75,11 +73,31 @@
 
             <div class="right_content">
                 <div class="tweet_box">
-
-                    <label>who to follow: a for loop looping through and displaying all users</label><br>
-
+                    <label>Who To Follow</label><br>
+                     <label>who to follow: a for loop looping through and displaying all users</label><br>	                    <c:forEach var="user" items="${users}">
+                        <c:set var="following" value="true"/>
+                        <hr/>
+                        <label>${user.fullName}</label>
+                        <label>${user.emailAddress}</label><br/>
+                        <c:forEach var="follows" items="${follows}" varStatus="loop">
+                            <c:if test="${follows.emailFollowing == user.emailAddress}">
+                                <form action="membership" method="post">
+                                    <input type="hidden" name="action" value="unfollow"> 
+                                    <input type="hidden" name="action1" value="${user.emailAddress}"> 
+                                    <button type="submit" id="btnContinue" class="button2">unFollow</button>
+                                </form>
+                                <c:set var="following" value="false"/>
+                            </c:if>
+                        </c:forEach>
+                         <c:if test="${following == true}">
+                            <form action="membership" method="post">
+                                <input type="hidden" name="action" value="follow"> 
+                                <input type="hidden" name="action1" value="${user.emailAddress}"> 
+                                <button type="submit" id="btnContinue" class="button">follow</button>
+                            </form>
+                        </c:if>
+                     </c:forEach>
                 </div>
-              
             </div>
         </div> 
     </body>
