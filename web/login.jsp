@@ -29,7 +29,7 @@
                 <label class="pad_top"/>
                 <input type="password" placeholder="password" name="password" value="${user.getPassword()}" required>
                 <span id="username_error" class="notVisible"></span> <br>
-                <input type="submit" value="Log In" class="margin_left"">
+                <input type="submit" value="Log In" class="margin_left">
                 
                 <label><input type="checkbox" name="remember_me">Remember me</label>
                 <a href="forgotpassword.jsp">Forgot Password</a><br>
