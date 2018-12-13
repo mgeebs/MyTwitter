@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.jsoup.Jsoup;
 import business.Tweet;
 import dataaccess.HashTagDB;
 import dataaccess.MentionDB;
@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpSession;
-import org.jsoup.Jsoup;
+
 
 
 @WebServlet(name = "addTweetServlet", urlPatterns = {"/addTweet"})

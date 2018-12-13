@@ -29,7 +29,7 @@ import java.util.Random;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import murach.util.MailUtilGmail;
-
+import murach.util.PwHashingUtil;
    
 
     @WebServlet(name = "membershipServlet", urlPatterns = {"/membership"})
@@ -77,8 +77,10 @@ public class membershipServlet extends HttpServlet {
         url = "/login.jsp";
         request.setAttribute("login_error", "User not found");
     }else{
+        PwHashingUtil hasher = new PwHashingUtil();
         String userID = user.getUserID();
-        if(user.getPassword().equals(password)){
+        String userHash = user.getPassword();
+        if(hasher.checkPasswordHash(userHash, password, user.getSalt().getBytes())){
             url = "/home.jsp";
             
             session.setAttribute("user", user);
@@ -150,6 +152,7 @@ public class membershipServlet extends HttpServlet {
         String password = request.getParameter("password");
         User sessionUser = (User) session.getAttribute("user");
         String folEmail = request.getParameter("action1");
+        String salt = createRandomPass();
         
         if (action.equals("follow")) {
             User user = UserDB.search_for_email(sessionUser.getEmailAddress());
@@ -175,7 +178,7 @@ public class membershipServlet extends HttpServlet {
             url = updatePassword(request, response);
         }
         
-        ArrayList<Follow> follows = FollowDB.searchButton(email);
+        ArrayList<Follow> follows = FollowDB.searchByEmail(email);
         request.setAttribute("follows", follows);
         int followingCount = 0;
         followingCount = follows.size();
@@ -219,7 +222,7 @@ public class membershipServlet extends HttpServlet {
         //set the user's credentials
         user.setPassword(randomPass);
         user.setEmailAddress(userEmail);
-       
+        
         UserDB.update_password(user);
         session.setAttribute("user", user);
         
@@ -248,7 +251,7 @@ public class membershipServlet extends HttpServlet {
         
     }
     
-    private String createRandomPass() {
+    public static String createRandomPass() {
         String upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerChars = upperChars.toLowerCase();
         String numbers = "1234567890";

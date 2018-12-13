@@ -28,12 +28,12 @@ public class UserDB {
         "INSERT INTO twitterdb.user (fullname, username, emailAddress, "
         + "birthdate, password, questionNo, answer, salt) "
         + "VALUES ('%s', '%s', '%s', "
-        + "'%s', '%s', '%s', '%s', '1234')";
+        + "'%s', '%s', '%s', '%s', '%s')";
         
         String sqlInsert = 
                 String.format(sqlStatement, user.getFullName(), user.getUsername(),
                         user.getEmailAddress(), user.getBirthdate(), user.getPassword(),
-                        user.getQuestionNo(), user.getAnswer()); 
+                        user.getQuestionNo(), user.getAnswer(), user.getSalt()); 
         
         if (search_for_email(user.getEmailAddress()) != null){
             return false;
@@ -103,7 +103,8 @@ public class UserDB {
                 user.setBirthdate(resultSet.getString(5));
                 user.setPassword(resultSet.getString(6));
                 user.setQuestionNo(resultSet.getString(7));
-                user.setAnswer(resultSet.getString(8));                
+                user.setAnswer(resultSet.getString(8)); 
+                user.setSalt(resultSet.getString(9));
                 return user;
             }
             else {
@@ -148,7 +149,8 @@ public class UserDB {
                 user.setBirthdate(resultSet.getString(5));
                 user.setPassword(resultSet.getString(6));
                 user.setQuestionNo(resultSet.getString(7));
-                user.setAnswer(resultSet.getString(8));                
+                user.setAnswer(resultSet.getString(8)); 
+                user.setSalt(resultSet.getString(9));
                 return user;
             }
             else {

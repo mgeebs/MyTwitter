@@ -1,9 +1,10 @@
 package murach.sql;
 
+import murach.util.PwHashingUtil;
 import murach.sql.ConnectionPool;
 import business.User;
 import dataaccess.UserDB;
-
+import controller.membershipServlet;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -97,8 +98,12 @@ public class SqlGatewayServlet extends HttpServlet {
                 response.addCookie(cookie);
             }
         }
- 
-        User user = new User(String.join(",", fullName, userName, emailAddress, password, birthdate, questionNo, answer));
+        
+        String salt = membershipServlet.createRandomPass();
+        
+        PwHashingUtil hasher = new PwHashingUtil();
+        password = hasher.hashPassword(password, salt.getBytes());
+        User user = new User(String.join(",", fullName, userName, emailAddress, password, birthdate, questionNo, answer, salt));
         boolean db_result = UserDB.insert(user);
         
         session.setAttribute("user", user);
