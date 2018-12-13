@@ -152,7 +152,7 @@ public class membershipServlet extends HttpServlet {
         String password = request.getParameter("password");
         User sessionUser = (User) session.getAttribute("user");
         String folEmail = request.getParameter("action1");
-        String salt = createRandomPass();
+        String salt = request.getParameter("salt");
         
         if (action.equals("follow")) {
             User user = UserDB.search_for_email(sessionUser.getEmailAddress());
@@ -167,14 +167,18 @@ public class membershipServlet extends HttpServlet {
         if (action.equals("unfollow")) {
             User user = UserDB.search_for_email(sessionUser.getEmailAddress());
             email = user.getEmailAddress();
+            
             FollowDB.unfollow(email, folEmail);
 
             url = "/home.jsp";
 
             session.setAttribute("user", user);
             request.setAttribute("email", email);
+            
         }
         if (action.equals("forgotPassword")) {
+            
+            request.setAttribute("salt", salt);
             url = updatePassword(request, response);
         }
         
@@ -214,15 +218,16 @@ public class membershipServlet extends HttpServlet {
             session.setAttribute("errorMsg", errorMsg);
             return url; //need to implement redirect/stuff saying the answer didn't match
         }
-        
+        String salt = userCheck.getSalt();
+        PwHashingUtil hasher = new PwHashingUtil();
         String randomPass = createRandomPass(); //create a new password of 8 random characters
-        
+        String hashedPass = hasher.hashPassword(randomPass, salt.getBytes());
         User user = new User(); //create a new User object
         
         //set the user's credentials
-        user.setPassword(randomPass);
+        user.setPassword(hashedPass);
         user.setEmailAddress(userEmail);
-        
+        user.setSalt(createRandomPass());
         UserDB.update_password(user);
         session.setAttribute("user", user);
         
