@@ -71,7 +71,7 @@
     border-style: solid;
     border-width: 5px;
     border-color: white;
-    padding-right: 10;
+    padding-right: 10px;
     background-color: #00aced;
     color: white;
     float: left;
@@ -162,7 +162,7 @@ content {
     border-radius:6px;
     
 }
-
+/*top right bottom*/
 .left_content{
     display: table-cell;
     width: 20%;
@@ -176,7 +176,6 @@ content {
     width: 50%;
     margin:200px auto 70px;
     padding: 10px;
-/*    background-color: #00aced;*/
 }
 .right_content{
     display: table-cell;
@@ -193,8 +192,7 @@ content {
     background: #00aced;
     color: white;
 }
-
- a:link {
+a:link {
   color: blue;
   background-color: transparent;
   text-decoration: none;
