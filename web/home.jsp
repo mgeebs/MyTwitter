@@ -16,19 +16,14 @@
         <div class="homepage">
             <div class="left_content">
                 <div class="tweet_box">
-
-                    <div class="tweet_box">
-
-
-                        <label>${user.fullName}</label>
-                        <label>user info goes here</label><br><br>
+                        <label>${user.fullName}</label><br/>
                         <hr/>
-                        <label>@${user.username}</label>
-                        <label>${user.emailAddress}</label>
-                        <label># of tweets: </label><br><br>
+                        <label>@${user.username}</label><br/>
+                        <label>${user.emailAddress}</label><br/>
+                        <label># of tweets: </label><br/><br/>
                 </div>
                         
-                <div class="trends">
+                <div class="tweet_box">
                     <label>Trends</label><br><br>
                     <c:forEach items="${trending}" var="trend">
                         <a href="http://localhost:8080/MyTwitter/hashtag.jsp?h=${trend}">#${trend}</a>
@@ -36,7 +31,7 @@
                     </c:forEach>
                 </div>
             </div>
-
+            
             <div class="center_content">
                 <div class="top_centered">
                     <form action="addTweet" method="post">
@@ -73,14 +68,14 @@
 
             <div class="right_content">
                 <div class="tweet_box">
-                    <label>Who To Follow</label><br>
-                     <label>who to follow: a for loop looping through and displaying all users</label><br>	                    <c:forEach var="user" items="${users}">
+                    <label>Who To Follow</label><br>	                    
+                    <c:forEach var="user" items="${users}">
                         <c:set var="following" value="true"/>
                         <hr/>
                         <label>${user.fullName}</label>
                         <label>${user.emailAddress}</label><br/>
                         <c:forEach var="follows" items="${follows}" varStatus="loop">
-                            <c:if test="${follows.emailFollowing == user.emailAddress}">
+                            <c:if test="${follows.followedEmail == user.emailAddress}">
                                 <form action="membership" method="post">
                                     <input type="hidden" name="action" value="unfollow"> 
                                     <input type="hidden" name="action1" value="${user.emailAddress}"> 
@@ -99,7 +94,8 @@
                      </c:forEach>
                 </div>
             </div>
-        </div> 
+        </div>
+       
     </body>
 </html>
 
