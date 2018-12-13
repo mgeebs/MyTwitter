@@ -22,6 +22,7 @@ public class User implements Serializable {
     private String birthdate;
     private String questionNo;
     private String answer;
+    private String salt;
 
     public User()
     {
@@ -33,7 +34,7 @@ public class User implements Serializable {
         birthdate = "";
         questionNo = "";
         answer = "";
-
+        salt = "";
     }
     public User(String fromString)
     {
@@ -45,6 +46,15 @@ public class User implements Serializable {
         this.setBirthdate(data[4]);
         this.setQuestionNo(data[5]);
         this.setAnswer(data[6]);
+        this.setSalt(data[7]);
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
     
     public String getUserID(){
