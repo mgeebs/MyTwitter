@@ -22,13 +22,13 @@ CREATE TABLE IF NOT EXISTS twitterdb.user (
   `username` varchar(45) NOT NULL,
   `emailAddress` varchar(45) NOT NULL,
   `birthdate` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `password` varchar(64) NOT NULL,
   `questionNo` int(11) NOT NULL,
   `answer` varchar(45) NOT NULL,
+  `salt` varchar(45) NOT NULL,
   `profilePicture` varchar(200) DEFAULT NULL,
   `LastLogin` DATETIME,
   `dateCreated` DATETIME,
-  `salt` int NOT NULL,
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
